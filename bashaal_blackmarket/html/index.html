@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bashaal RP - Blackmarket</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-container">
+                <i class="fas fa-skull-crossbones logo-icon"></i>
+                <h1 class="logo-text">BASHAAL <span class="logo-accent">BLACKMARKET</span></h1>
+            </div>
+            <div class="balance-container">
+                <p class="balance-text"><i class="fas fa-money-bill-wave"></i> Black Money Only - Secure Transactions</p>
+            </div>
+            <button class="close-btn" id="closeBtn"><i class="fas fa-times"></i></button>
+        </header>
+
+        <!-- Category tabs navigation -->
+        <nav class="category-tabs" id="categoryTabs">
+            <!-- Tabs will be generated dynamically by JavaScript -->
+            <div class="loading-tabs">
+                <i class="fas fa-spinner fa-spin"></i> Loading categories...
+            </div>
+        </nav>
+
+        <main class="content">
+            <!-- Items grid container -->
+            <section class="tab-content active">
+                <div class="category-header">
+                    <h2 class="category-title" id="currentCategoryTitle">
+                        <i class="fas fa-store"></i> All Items
+                    </h2>
+                    <p class="category-description" id="currentCategoryDescription">
+                        All available items in the blackmarket
+                    </p>
+                </div>
+                
+                <div class="items-grid" id="itemsGrid">
+                    <div class="loading" id="itemsLoading">
+                        <div class="loading-spinner">
+                            <i class="fas fa-spinner fa-spin fa-3x"></i>
+                        </div>
+                        <p class="loading-text">Loading Items...</p>
+                        <p class="loading-subtext">Please select a category</p>
+                    </div>
+                </div>
+                
+                <!-- Item counter -->
+                <div class="item-counter" id="itemCounter">
+                    <span class="counter-text">0 items</span>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p class="warning"><i class="fas fa-exclamation-triangle"></i> All transactions are final and anonymous. No refunds.</p>
+            <p class="copyright">Bashaal RP © 2024 - Blackmarket System v2.0</p>
+        </footer>
+    </div>
+
+    <!-- Sounds -->
+    <audio id="openSound" src="assets/sounds/open.wav" preload="auto"></audio>
+    <audio id="clickSound" src="assets/sounds/click.wav" preload="auto"></audio>
+    <audio id="closeSound" src="assets/sounds/close.wav" preload="auto"></audio>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
