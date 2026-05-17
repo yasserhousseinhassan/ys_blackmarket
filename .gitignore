@@ -1,1 +1,19 @@
-/.sixth
+# Development
+.sixth
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Temp files
+temp/
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts (if any)
+dist/
+build/
