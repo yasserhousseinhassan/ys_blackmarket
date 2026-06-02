@@ -12,7 +12,7 @@ A secure, modern, and highly configurable blackmarket resource for **FiveM** wit
 
 - **Futuristic NUI Interface** — Clean, modern, and fully responsive UI
 - **Multi-Framework Support** — Works out-of-the-box on **ESX** and **QBCore** (fully auto-detected!)
-- **Multi-Inventory Support** — Compatible with **ox_inventory**, QBCore default inventory, ESX standard inventory, or your own custom inventory export
+- **Multi-Inventory Support** — Compatible out-of-the-box with **ox_inventory**, **qb-inventory** (ps-inventory, lj-inventory), **qs-inventory** (Quasar), **codem-inventory** (m-inventory), **core_inventory**, **chezza-inventory**, **brutal_inventory**, **origen_inventory**, **tgiann-inventory**, **ak47_inventory**, **disc-inventoryhud**, standard **ESX/QBCore** inventory tables, or custom integrations!
 - **Flexible Payments** — Buy items using cash, bank accounts, dirty money accounts (`black_money`), or using any item (e.g. marked bills, gold coins) as currency
 - **Dynamic Customization** — Change UI titles, icons, warnings, and copyright footers directly from `config.lua` without touching HTML/JS files!
 - **Category-based Navigation** — Pistols, Rifles, Tools, Medical, and more
@@ -30,7 +30,7 @@ A secure, modern, and highly configurable blackmarket resource for **FiveM** wit
 | Resource       | Required | Notes                              |
 |----------------|----------|------------------------------------|
 | **es_extended** or **qb-core**    | ✅ Yes   | Auto-detected framework            |
-| **ox_inventory** (Optional)  | ❌ No    | Supported; can also use default framework inventory |
+| **Inventory System**  | ❌ No    | Configurable (OX, QB, QS, Codem, Core, Chezza, Brutal, Origen, Tgiann, AK47, Disc, etc.) |
 
 ---
 
@@ -58,7 +58,7 @@ All settings are located in `config.lua`.
 
 ```lua
 Config.Framework = "auto" -- "auto" (detect automatically), "esx", "qb"
-Config.Inventory = "auto" -- "auto" (detect automatically), "ox", "qb", "esx", "custom"
+Config.Inventory = "auto" -- "auto", "ox", "qb", "esx", "qs", "codem", "core", "chezza", "brutal", "origen", "tgiann", "ak47", "disc", "custom"
 ```
 
 ### Payment and Currency Settings

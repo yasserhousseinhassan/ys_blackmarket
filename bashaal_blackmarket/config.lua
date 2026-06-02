@@ -250,7 +250,7 @@ Config.SerialPrefix = "YS-"
 Config.Framework = "auto" -- "auto" (detect automatically), "esx", "qb"
 
 -- Inventory Settings
-Config.Inventory = "auto" -- "auto" (detect automatically), "ox", "qb" (qb/ps/lj), "esx" (default ESX), "qs" (Quasar), "codem" (Codem/m-inventory), "core" (Core Inventory), "chezza" (Chezza), "custom"
+Config.Inventory = "auto" -- "auto" (detect automatically), "ox" (ox_inventory), "qb" (qb/ps/lj-inventory), "esx" (default ESX), "qs" (Quasar), "codem" (m-inventory), "core" (Core Inventory), "chezza" (Chezza), "brutal" (Brutal Inventory), "origen" (Origen Inventory), "tgiann" (Tgiann Inventory), "ak47" (Ak47 Inventory), "disc" (disc-inventoryhud), "custom"
 
 -- Currency Settings
 Config.MoneyType = "black_money" -- For ESX: "black_money", "money". For QBCore: "cash", "bank", "crypto"
