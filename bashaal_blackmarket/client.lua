@@ -1,6 +1,6 @@
 -- Local variables
-local PlayerData = {}
 local ESX = nil
+local QBCore = nil
 local isMenuOpen = false
 local currentCooldown = 0
 local nearMarket = false
@@ -8,17 +8,63 @@ local currentMarket = nil
 local npcPed = nil  -- Un seul NPC maintenant
 local npcCreated = false
 
--- Load ESX
+-- Framework detection and loading
+local function InitFramework()
+    if Config.Framework == "auto" then
+        if GetResourceState('es_extended') == 'started' then
+            Config.Framework = "esx"
+        elseif GetResourceState('qb-core') == 'started' then
+            Config.Framework = "qb"
+        else
+            print("^1[YS Blackmarket] Error: No compatible framework detected!^7")
+        end
+    end
+
+    if Config.Framework == "esx" then
+        Citizen.CreateThread(function()
+            while ESX == nil do
+                TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+                Citizen.Wait(100)
+            end
+        end)
+    elseif Config.Framework == "qb" then
+        QBCore = exports['qb-core']:GetCoreObject()
+    end
+end
+
 Citizen.CreateThread(function()
-    while ESX == nil do
-        TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-        Citizen.Wait(100)
-    end
-    while ESX.GetPlayerData().job == nil do
-        Citizen.Wait(100)
-    end
-    PlayerData = ESX.GetPlayerData()
+    InitFramework()
 end)
+
+-- Notification Helper
+local function ShowNotification(message, type)
+    if Config.Framework == "esx" and ESX then
+        ESX.ShowNotification(message)
+    elseif Config.Framework == "qb" and QBCore then
+        QBCore.Functions.Notify(message, type or "primary")
+    else
+        -- Native GTA notification fallback
+        SetNotificationTextEntry("STRING")
+        AddTextComponentString(message)
+        DrawNotification(false, false)
+    end
+end
+
+-- Standalone DrawText3D function
+local function DrawText3D(coords, text)
+    local onScreen, _x, _y = World3dToScreen2d(coords.x, coords.y, coords.z)
+    if onScreen then
+        SetTextScale(0.35, 0.35)
+        SetTextFont(4)
+        SetTextProportional(1)
+        SetTextEntry("STRING")
+        SetTextCentre(1)
+        AddTextComponentString(text)
+        DrawText(_x, _y)
+        local factor = (string.len(text)) / 370
+        DrawRect(_x, _y + 0.0125, 0.015 + factor, 0.03, 0, 0, 0, 75)
+    end
+end
 
 -- Function to create a completely static NPC
 local function CreateNPC(coords, heading)
@@ -74,7 +120,7 @@ Citizen.CreateThread(function()
     if #Config.BlackmarketPoints > 0 and not npcCreated then
         local point = Config.BlackmarketPoints[1] -- Prend le premier point seulement
         npcPed = CreateNPC(point.coords, point.npcHeading)
-        print("^2[Bashaal Blackmarket]^7 NPC created at: " .. point.coords.x .. ", " .. point.coords.y)
+        print("^2[YS Blackmarket]^7 NPC created at: " .. point.coords.x .. ", " .. point.coords.y)
     end
 end)
 
@@ -92,7 +138,7 @@ Citizen.CreateThread(function()
                 SetPedKeepTask(npcPed, true)
                 
                 if Config.DebugMode then
-                    print("^3[Bashaal Blackmarket]^7 NPC smoking animation restarted")
+                    print("^3[YS Blackmarket]^7 NPC smoking animation restarted")
                 end
             end
         else
@@ -100,7 +146,7 @@ Citizen.CreateThread(function()
             if #Config.BlackmarketPoints > 0 and npcCreated then
                 local point = Config.BlackmarketPoints[1]
                 npcPed = CreateNPC(point.coords, point.npcHeading)
-                print("^3[Bashaal Blackmarket]^7 NPC was missing, recreated")
+                print("^3[YS Blackmarket]^7 NPC was missing, recreated")
             end
         end
     end
@@ -123,10 +169,9 @@ Citizen.CreateThread(function()
                 sleep = 0
 
                 -- Show 3D help text
-                ESX.Game.Utils.DrawText3D(
+                DrawText3D(
                     vector3(market.coords.x, market.coords.y, market.coords.z + 1.0), 
-                    Config.HelpText, 
-                    0.6
+                    Config.HelpText
                 )
 
                 -- Open menu with E key
@@ -143,7 +188,7 @@ Citizen.CreateThread(function()
             -- Close menu if player moves away
             if isMenuOpen then
                 CloseBlackmarketMenu()
-                ESX.ShowNotification("~r~You have moved away from the blackmarket.")
+                ShowNotification("~r~You have moved away from the blackmarket.", "error")
             end
         end
 
@@ -187,12 +232,12 @@ end
 -- Function to open the blackmarket menu
 function OpenBlackmarketMenu()
     if not currentMarket then
-        ESX.ShowNotification("~r~You must be near the dealer.")
+        ShowNotification("~r~You must be near the dealer.", "error")
         return
     end
     
     if currentCooldown > GetGameTimer() then
-        ESX.ShowNotification("~y~Please wait before reopening the menu.")
+        ShowNotification("~y~Please wait before reopening the menu.", "error")
         return
     end
 
@@ -210,14 +255,18 @@ function OpenBlackmarketMenu()
         action = 'open',
         categories = Config.Categories,
         itemsByCategory = organizedItems,
-        defaultCategory = Config.DefaultCategory
+        defaultCategory = Config.DefaultCategory,
+        uiTitle = Config.UITitle,
+        uiLogoIcon = Config.UILogoIcon,
+        uiWarning = Config.UIWarning,
+        uiCopyright = Config.UICopyright
     })
 
     -- Play open sound
     SendNUIMessage({ action = 'playSound', sound = 'open' })
 
     -- Notification
-    ESX.ShowNotification("~b~Blackmarket ~w~open. Secure transactions.")
+    ShowNotification("~b~Blackmarket ~w~open. Secure transactions.", "success")
 end
 
 -- Function to close the menu
@@ -252,7 +301,7 @@ RegisterNUICallback('purchase', function(data, cb)
     local itemId = data.id
     
     if currentCooldown > GetGameTimer() then
-        ESX.ShowNotification("~r~Please wait before a new purchase.")
+        ShowNotification("~r~Please wait before a new purchase.", "error")
         cb({ success = false, message = "Cooldown active" })
         return
     end
@@ -263,7 +312,7 @@ RegisterNUICallback('purchase', function(data, cb)
     SendNUIMessage({ action = 'playSound', sound = 'click' })
 
     -- Send purchase request to server
-    TriggerServerEvent('bashaal_blackmarket:purchase', itemId)
+    TriggerServerEvent('ys_blackmarket:purchase', itemId)
 
     cb('ok')
 end)
@@ -275,12 +324,12 @@ RegisterNUICallback('changeCategory', function(data, cb)
 end)
 
 -- Event listener for purchase result
-RegisterNetEvent('bashaal_blackmarket:purchaseResult')
-AddEventHandler('bashaal_blackmarket:purchaseResult', function(success, message)
+RegisterNetEvent('ys_blackmarket:purchaseResult')
+AddEventHandler('ys_blackmarket:purchaseResult', function(success, message)
     if success then
-        ESX.ShowNotification("~g~Purchase successful! ~w~" .. message)
+        ShowNotification("~g~Purchase successful! ~w~" .. message, "success")
     else
-        ESX.ShowNotification("~r~Purchase failed. ~w~" .. message)
+        ShowNotification("~r~Purchase failed. ~w~" .. message, "error")
     end
 end)
 
@@ -292,7 +341,7 @@ AddEventHandler('onResourceStop', function(resource)
         -- Clean up the single NPC
         if DoesEntityExist(npcPed) then
             DeleteEntity(npcPed)
-            print("^2[Bashaal Blackmarket]^7 NPC deleted on resource stop")
+            print("^2[YS Blackmarket]^7 NPC deleted on resource stop")
         end
     end
 end)
@@ -308,7 +357,7 @@ AddEventHandler('onResourceStart', function(resource)
         -- Reset NPC creation flag
         npcCreated = false
         
-        print("^2[Bashaal Blackmarket]^7 Resource started, NPC will be created")
+        print("^2[YS Blackmarket]^7 Resource started, NPC will be created")
     end
 end)
 

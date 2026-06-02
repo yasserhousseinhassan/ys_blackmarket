@@ -194,3 +194,23 @@ Config.VerifyItemsOnStart = true
 
 -- UI Settings
 Config.DefaultCategory = "pistols" -- Default category to show
+
+-- UI Customization
+Config.UITitle = "YS BLACKMARKET"
+Config.UILogoIcon = "fa-skull-crossbones"
+Config.UIWarning = "All transactions are final and anonymous. No refunds."
+Config.UICopyright = "Storm Development © 2026 - Blackmarket System v1.0"
+
+-- Weapon/Item Serial Prefix
+Config.SerialPrefix = "YS-"
+
+-- Framework Settings
+Config.Framework = "auto" -- "auto" (detect automatically), "esx", "qb"
+
+-- Inventory Settings
+Config.Inventory = "auto" -- "auto" (detect automatically), "ox", "qb", "esx", "custom"
+
+-- Currency Settings
+Config.MoneyType = "black_money" -- For ESX: "black_money", "money". For QBCore: "cash", "bank", "crypto"
+Config.UseItemAsMoney = false -- Set to true if players buy using an item (e.g. markedbills)
+Config.MoneyItem = "markedbills" -- Item name if UseItemAsMoney is true

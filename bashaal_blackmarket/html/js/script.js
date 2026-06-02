@@ -282,6 +282,43 @@ window.addEventListener('message', function(event) {
                 // Generate category tabs
                 generateCategoryTabs(event.data.categories || [], event.data.defaultCategory);
             }
+
+            // Dynamic UI customization
+            if (event.data.uiTitle) {
+                document.title = event.data.uiTitle;
+                const words = event.data.uiTitle.split(' ');
+                if (words.length > 1) {
+                    const firstPart = words.slice(0, -1).join(' ');
+                    const lastWord = words[words.length - 1];
+                    const logoTextEl = document.getElementById('logoText');
+                    if (logoTextEl) {
+                        logoTextEl.innerHTML = `${firstPart} <span class="logo-accent">${lastWord}</span>`;
+                    }
+                } else {
+                    const logoTextEl = document.getElementById('logoText');
+                    if (logoTextEl) {
+                        logoTextEl.textContent = event.data.uiTitle;
+                    }
+                }
+            }
+            if (event.data.uiLogoIcon) {
+                const logoIcon = document.getElementById('logoIcon');
+                if (logoIcon) {
+                    logoIcon.className = `fas ${event.data.uiLogoIcon} logo-icon`;
+                }
+            }
+            if (event.data.uiWarning) {
+                const warningText = document.getElementById('warningText');
+                if (warningText) {
+                    warningText.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${event.data.uiWarning}`;
+                }
+            }
+            if (event.data.uiCopyright) {
+                const copyrightText = document.getElementById('copyrightText');
+                if (copyrightText) {
+                    copyrightText.textContent = event.data.uiCopyright;
+                }
+            }
             break;
 
         case 'close':
