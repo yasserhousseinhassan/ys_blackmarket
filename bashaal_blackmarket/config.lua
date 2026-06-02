@@ -50,42 +50,52 @@ Config.Categories = {
 Config.Items = {
     -- Pistols Category
     {
-        id = "WEAPON_PRISMATICP80",
-        name = "Basic Pistol",
-        description = "Standard semi-automatic pistol. Medium accuracy.",
-        price = 100000,
+        id = "weapon_pistol",
+        name = "Pistol",
+        description = "Standard semi-automatic handgun. High accuracy, low damage.",
+        price = 5000,
         category = "pistols",
         itemType = "weapon",
-        ammo = 0,
-        image = "assets/images/weapons/WEAPON_PRISMATICP80.png"
+        ammo = 36,
+        image = "assets/images/weapons/weapon_pistol.png"
     },
     {
-        id = "WEAPON_PRISMATICFNX45",
+        id = "weapon_combatpistol",
         name = "Combat Pistol",
-        description = "Combat pistol, more powerful than standard.",
-        price = 150000,
+        description = "Compact semi-automatic handgun, highly favored by security forces.",
+        price = 10000,
         category = "pistols",
         itemType = "weapon",
-        ammo = 0,
-        image = "assets/images/weapons/WEAPON_PRISMATICFNX45.png"
+        ammo = 48,
+        image = "assets/images/weapons/weapon_combatpistol.png"
     },
     {
         id = "weapon_appistol",
-        name = "AP PISTOL",
-        description = "Standard automatic pistol.",
-        price = 500000,
+        name = "AP Pistol",
+        description = "Fully automatic pistol. High fire rate and armor penetration.",
+        price = 25000,
         category = "pistols",
         itemType = "weapon",
-        ammo = 0,
+        ammo = 36,
         image = "assets/images/weapons/weapon_appistol.png"
     },
     
     -- Rifles Category
     {
+        id = "weapon_smg",
+        name = "Submachine Gun",
+        description = "Compact submachine gun. Fast firing rate and low recoil.",
+        price = 30000,
+        category = "rifles",
+        itemType = "weapon",
+        ammo = 120,
+        image = "assets/images/weapons/weapon_smg.png"
+    },
+    {
         id = "weapon_assaultrifle",
         name = "Assault Rifle",
-        description = "Standard assault rifle for combat situations.",
-        price = 15000,
+        description = "Standard automatic rifle. Good range and high firepower.",
+        price = 50000,
         category = "rifles",
         itemType = "weapon",
         ammo = 180,
@@ -94,86 +104,118 @@ Config.Items = {
     {
         id = "weapon_carbinerifle",
         name = "Carbine Rifle",
-        description = "Lightweight carbine rifle, accurate and fast.",
-        price = 18500,
+        description = "Modern assault carbine, excellent accuracy and handling.",
+        price = 60000,
         category = "rifles",
         itemType = "weapon",
-        ammo = 210,
+        ammo = 180,
         image = "assets/images/weapons/weapon_carbinerifle.png"
     },
+
     -- Tools Category
     {
-        id = "laptop",
-        name = "laptop",
-        description = "laptop",
-        price = 400,
+        id = "lockpick",
+        name = "Lockpick",
+        description = "Used to pick basic locks on vehicles or simple safes.",
+        price = 500,
         category = "tools",
         itemType = "item",
         stack = 1,
-        image = "assets/images/items/laptop.png"
+        image = "assets/images/items/lockpick.png"
     },
     {
         id = "drill",
         name = "Drill",
-        description = "Robust electric drill for basic safes.",
-        price = 3200,
+        description = "Industrial grade electric drill used for breaking vaults.",
+        price = 5000,
         category = "tools",
         itemType = "item",
         stack = 1,
         image = "assets/images/items/drill.png"
     },
+    {
+        id = "thermite",
+        name = "Thermite",
+        description = "Chemical mixture that burns at extremely high temperatures. Used for melting metal locks.",
+        price = 2500,
+        category = "tools",
+        itemType = "item",
+        stack = 1,
+        image = "assets/images/items/thermite.png"
+    },
+
     -- Medical Category
     {
         id = "bandage",
         name = "Bandage",
-        description = "Sterile bandage for treating light wounds.",
-        price = 150,
+        description = "Sterile medical bandage to dress wounds and stop minor bleeding.",
+        price = 100,
         category = "medical",
         itemType = "item",
         stack = 5,
         image = "assets/images/items/bandage.png"
     },
+    {
+        id = "medikit",
+        name = "First Aid Kit",
+        description = "Complete trauma kit. Treats major wounds and restores health fully.",
+        price = 1000,
+        category = "medical",
+        itemType = "item",
+        stack = 1,
+        image = "assets/images/items/medikit.png"
+    },
     
     -- Other Category
     {
-        id = "pooch_bag",
-        name = "pooch bag",
-        description = "pooch bag",
-        price = 2200,
+        id = "weed_baggy",
+        name = "Bag of Weed",
+        description = "Ziploc baggy containing medical grade cannabis.",
+        price = 150,
         category = "other",
         itemType = "item",
-        stack = 25,
-        image = "assets/images/items/pooch_bag.png"
+        stack = 10,
+        image = "assets/images/items/weed_baggy.png"
     },
     {
-        id = "empty_lean_bottle",
-        name = "empty lean bottle",
-        description = "empty lean bottle",
-        price = 2200,
+        id = "cocaine_baggy",
+        name = "Bag of Cocaine",
+        description = "Small bag containing processed cocaine powder.",
+        price = 300,
         category = "other",
         itemType = "item",
-        stack = 25,
-        image = "assets/images/items/empty_lean_bottle.png"
+        stack = 10,
+        image = "assets/images/items/cocaine_baggy.png"
     },
     {
-        id = "lighter",
-        name = "lighter",
-        description = "lighter",
-        price = 2200,
+        id = "meth_baggy",
+        name = "Bag of Meth",
+        description = "Baggy containing high purity blue meth crystals.",
+        price = 250,
+        category = "other",
+        itemType = "item",
+        stack = 10,
+        image = "assets/images/items/meth_baggy.png"
+    },
+    {
+        id = "rolex",
+        name = "Rolex Watch",
+        description = "High-end luxury gold watch. Can be fenced or worn.",
+        price = 2000,
         category = "other",
         itemType = "item",
         stack = 1,
-        image = "assets/images/items/lighter.png"
+        image = "assets/images/items/rolex.png"
     },
     {
-        id = "empty_cup",
-        name = "empty_cup",
-        description = "empty_cup",
-        price = 2200,
+        id = "armor",
+        name = "Body Armor",
+        description = "Lightweight bulletproof vest for protection against gunshots.",
+        price = 1200,
         category = "other",
         itemType = "item",
         stack = 1,
-        image = "assets/images/items/empty_cup.png"
+        image = "assets/images/items/armor.png"
     }
 }
 
@@ -197,7 +239,7 @@ Config.DefaultCategory = "pistols" -- Default category to show
 
 -- UI Customization
 Config.UITitle = "YS BLACKMARKET"
-Config.UILogoIcon = "fa-skull-crossbones"
+Config.UILogoIcon = "logo.png"
 Config.UIWarning = "All transactions are final and anonymous. No refunds."
 Config.UICopyright = "Storm Development © 2026 - Blackmarket System v1.0"
 
@@ -208,7 +250,7 @@ Config.SerialPrefix = "YS-"
 Config.Framework = "auto" -- "auto" (detect automatically), "esx", "qb"
 
 -- Inventory Settings
-Config.Inventory = "auto" -- "auto" (detect automatically), "ox", "qb", "esx", "custom"
+Config.Inventory = "auto" -- "auto" (detect automatically), "ox", "qb" (qb/ps/lj), "esx" (default ESX), "qs" (Quasar), "codem" (Codem/m-inventory), "core" (Core Inventory), "chezza" (Chezza), "custom"
 
 -- Currency Settings
 Config.MoneyType = "black_money" -- For ESX: "black_money", "money". For QBCore: "cash", "bank", "crypto"

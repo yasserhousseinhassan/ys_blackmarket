@@ -78,16 +78,36 @@ local function GetPlayerMoney(xPlayer, src)
         if invType == "auto" then
             if GetResourceState('ox_inventory') == 'started' then
                 invType = "ox"
-            elseif Config.Framework == "qb" then
-                invType = "qb"
-            elseif Config.Framework == "esx" then
-                invType = "esx"
+            elseif GetResourceState('qs-inventory') == 'started' then
+                invType = "qs"
+            elseif GetResourceState('codem-inventory') == 'started' or GetResourceState('m-inventory') == 'started' then
+                invType = "codem"
+            elseif GetResourceState('core_inventory') == 'started' then
+                invType = "core"
+            elseif GetResourceState('chezza-inventory') == 'started' or GetResourceState('inventory') == 'started' then
+                if exports['inventory'] and exports['inventory'].AddItem then
+                    invType = "chezza"
+                end
+            end
+            
+            if invType == "auto" then
+                if Config.Framework == "qb" then
+                    invType = "qb"
+                elseif Config.Framework == "esx" then
+                    invType = "esx"
+                end
             end
         end
 
         if invType == "ox" then
             local item = exports.ox_inventory:GetItem(src, Config.MoneyItem, nil, false)
             return item and item.count or 0
+        elseif invType == "qs" then
+            if exports['qs-inventory'] and exports['qs-inventory'].GetItemTotalAmount then
+                return exports['qs-inventory']:GetItemTotalAmount(src, Config.MoneyItem) or 0
+            end
+            local item = xPlayer.Functions.GetItemByName and xPlayer.Functions.GetItemByName(Config.MoneyItem) or xPlayer.getInventoryItem and xPlayer.getInventoryItem(Config.MoneyItem)
+            return item and (item.amount or item.count) or 0
         elseif invType == "qb" then
             local item = xPlayer.Functions.GetItemByName(Config.MoneyItem)
             return item and item.amount or 0
@@ -113,15 +133,55 @@ local function RemovePlayerMoney(xPlayer, src, amount)
         if invType == "auto" then
             if GetResourceState('ox_inventory') == 'started' then
                 invType = "ox"
-            elseif Config.Framework == "qb" then
-                invType = "qb"
-            elseif Config.Framework == "esx" then
-                invType = "esx"
+            elseif GetResourceState('qs-inventory') == 'started' then
+                invType = "qs"
+            elseif GetResourceState('codem-inventory') == 'started' or GetResourceState('m-inventory') == 'started' then
+                invType = "codem"
+            elseif GetResourceState('core_inventory') == 'started' then
+                invType = "core"
+            elseif GetResourceState('chezza-inventory') == 'started' or GetResourceState('inventory') == 'started' then
+                if exports['inventory'] and exports['inventory'].AddItem then
+                    invType = "chezza"
+                end
+            end
+            
+            if invType == "auto" then
+                if Config.Framework == "qb" then
+                    invType = "qb"
+                elseif Config.Framework == "esx" then
+                    invType = "esx"
+                end
             end
         end
 
         if invType == "ox" then
             return exports.ox_inventory:RemoveItem(src, Config.MoneyItem, amount)
+        elseif invType == "qs" then
+            if exports['qs-inventory'] and exports['qs-inventory'].RemoveItem then
+                return exports['qs-inventory']:RemoveItem(src, Config.MoneyItem, amount)
+            end
+            return xPlayer.Functions.RemoveItem(Config.MoneyItem, amount)
+        elseif invType == "codem" then
+            local codemExport = exports['codem-inventory'] or exports['m-inventory']
+            if codemExport then
+                return codemExport:RemoveItem(src, Config.MoneyItem, amount)
+            end
+            if Config.Framework == "qb" then
+                return xPlayer.Functions.RemoveItem(Config.MoneyItem, amount)
+            else
+                xPlayer.removeInventoryItem(Config.MoneyItem, amount)
+                return true
+            end
+        elseif invType == "core" then
+            if exports['core_inventory'] then
+                return exports['core_inventory']:removeItem(src, Config.MoneyItem, amount)
+            end
+        elseif invType == "chezza" then
+            if exports['inventory'] and exports['inventory'].RemoveItem then
+                return exports['inventory']:RemoveItem(src, Config.MoneyItem, amount)
+            end
+            xPlayer.removeInventoryItem(Config.MoneyItem, amount)
+            return true
         elseif invType == "qb" then
             return xPlayer.Functions.RemoveItem(Config.MoneyItem, amount)
         elseif invType == "esx" then
@@ -146,15 +206,55 @@ local function AddPlayerMoney(xPlayer, src, amount)
         if invType == "auto" then
             if GetResourceState('ox_inventory') == 'started' then
                 invType = "ox"
-            elseif Config.Framework == "qb" then
-                invType = "qb"
-            elseif Config.Framework == "esx" then
-                invType = "esx"
+            elseif GetResourceState('qs-inventory') == 'started' then
+                invType = "qs"
+            elseif GetResourceState('codem-inventory') == 'started' or GetResourceState('m-inventory') == 'started' then
+                invType = "codem"
+            elseif GetResourceState('core_inventory') == 'started' then
+                invType = "core"
+            elseif GetResourceState('chezza-inventory') == 'started' or GetResourceState('inventory') == 'started' then
+                if exports['inventory'] and exports['inventory'].AddItem then
+                    invType = "chezza"
+                end
+            end
+            
+            if invType == "auto" then
+                if Config.Framework == "qb" then
+                    invType = "qb"
+                elseif Config.Framework == "esx" then
+                    invType = "esx"
+                end
             end
         end
 
         if invType == "ox" then
             return exports.ox_inventory:AddItem(src, Config.MoneyItem, amount)
+        elseif invType == "qs" then
+            if exports['qs-inventory'] and exports['qs-inventory'].AddItem then
+                return exports['qs-inventory']:AddItem(src, Config.MoneyItem, amount)
+            end
+            return xPlayer.Functions.AddItem(Config.MoneyItem, amount)
+        elseif invType == "codem" then
+            local codemExport = exports['codem-inventory'] or exports['m-inventory']
+            if codemExport then
+                return codemExport:AddItem(src, Config.MoneyItem, amount)
+            end
+            if Config.Framework == "qb" then
+                return xPlayer.Functions.AddItem(Config.MoneyItem, amount)
+            else
+                xPlayer.addInventoryItem(Config.MoneyItem, amount)
+                return true
+            end
+        elseif invType == "core" then
+            if exports['core_inventory'] then
+                return exports['core_inventory']:addItem(src, Config.MoneyItem, amount)
+            end
+        elseif invType == "chezza" then
+            if exports['inventory'] and exports['inventory'].AddItem then
+                return exports['inventory']:AddItem(src, Config.MoneyItem, amount)
+            end
+            xPlayer.addInventoryItem(Config.MoneyItem, amount)
+            return true
         elseif invType == "qb" then
             return xPlayer.Functions.AddItem(Config.MoneyItem, amount)
         elseif invType == "esx" then
@@ -183,41 +283,77 @@ local function AddItemToInventory(src, xPlayer, itemId, itemConfig)
     if invType == "auto" then
         if GetResourceState('ox_inventory') == 'started' then
             invType = "ox"
-        elseif Config.Framework == "qb" then
-            invType = "qb"
-        elseif Config.Framework == "esx" then
-            invType = "esx"
+        elseif GetResourceState('qs-inventory') == 'started' then
+            invType = "qs"
+        elseif GetResourceState('codem-inventory') == 'started' or GetResourceState('m-inventory') == 'started' then
+            invType = "codem"
+        elseif GetResourceState('core_inventory') == 'started' then
+            invType = "core"
+        elseif GetResourceState('chezza-inventory') == 'started' or GetResourceState('inventory') == 'started' then
+            if exports['inventory'] and exports['inventory'].AddItem then
+                invType = "chezza"
+            end
+        end
+        
+        -- Fallback if no specific inventory is detected
+        if invType == "auto" then
+            if Config.Framework == "qb" then
+                invType = "qb"
+            elseif Config.Framework == "esx" then
+                invType = "esx"
+            end
         end
     end
 
+    local metadata = {}
+    if itemConfig.itemType == "weapon" then
+        metadata.ammo = itemConfig.ammo or 30
+        metadata.components = {}
+        metadata.durability = 100
+        metadata.serial = (Config.SerialPrefix or "YS-") .. math.random(10000000, 99999999)
+        metadata.registered = false
+    end
+
     if invType == "ox" then
-        if not exports.ox_inventory then
-            return false, "ox_inventory_not_available"
-        end
-        local metadata = {}
-        if itemConfig.itemType == "weapon" then
-            metadata.ammo = itemConfig.ammo or 30
-            metadata.components = {}
-            metadata.durability = 100
-            metadata.serial = (Config.SerialPrefix or "YS-") .. math.random(10000000, 99999999)
-            metadata.registered = false
-        end
-        
+        if not exports.ox_inventory then return false, "ox_inventory_not_available" end
         local success = exports.ox_inventory:AddItem(src, itemId, quantity, metadata)
-        if success then
-            return true, "success"
+        return success, success and "success" or "inventory_full"
+
+    elseif invType == "qs" then
+        if not exports['qs-inventory'] then return false, "qs_inventory_not_available" end
+        local success = exports['qs-inventory']:AddItem(src, itemId, quantity, nil, metadata)
+        return success, success and "success" or "inventory_full"
+
+    elseif invType == "codem" then
+        local codemExport = exports['codem-inventory'] or exports['m-inventory']
+        if codemExport then
+            local success = codemExport:AddItem(src, itemId, quantity, nil, metadata)
+            return success, success and "success" or "inventory_full"
         else
-            return false, "inventory_full"
+            if Config.Framework == "qb" then
+                local success = xPlayer.Functions.AddItem(itemId, quantity, nil, metadata)
+                if success then TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[itemId], "add") end
+                return success, success and "success" or "inventory_full"
+            else
+                xPlayer.addInventoryItem(itemId, quantity)
+                return true, "success"
+            end
         end
+
+    elseif invType == "core" then
+        if not exports['core_inventory'] then return false, "core_inventory_not_available" end
+        local success = exports['core_inventory']:addItem(src, itemId, quantity, metadata)
+        return success, success and "success" or "inventory_full"
+
+    elseif invType == "chezza" then
+        if exports['inventory'] and exports['inventory'].AddItem then
+            local success = exports['inventory']:AddItem(src, itemId, quantity, metadata)
+            return success, success and "success" or "inventory_full"
+        end
+        xPlayer.addInventoryItem(itemId, quantity)
+        return true, "success"
 
     elseif invType == "qb" then
-        local metadata = {}
-        if itemConfig.itemType == "weapon" then
-            metadata.ammo = itemConfig.ammo or 30
-            metadata.durability = 100
-            metadata.serial = (Config.SerialPrefix or "YS-") .. math.random(10000000, 99999999)
-        end
-
         local success = xPlayer.Functions.AddItem(itemId, quantity, nil, metadata)
         if success then
             TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[itemId], "add")
@@ -227,7 +363,6 @@ local function AddItemToInventory(src, xPlayer, itemId, itemConfig)
         end
 
     elseif invType == "esx" then
-        -- Default ESX inventory
         if xPlayer.canCarryItem and not xPlayer.canCarryItem(itemId, quantity) then
             return false, "inventory_full"
         end
@@ -235,8 +370,6 @@ local function AddItemToInventory(src, xPlayer, itemId, itemConfig)
         return true, "success"
         
     elseif invType == "custom" then
-        -- Insert custom inventory code here if needed
-        -- e.g. exports['custom-inventory']:AddItem(src, itemId, quantity)
         return true, "success"
     end
 
@@ -249,10 +382,24 @@ local function VerifyItemExists(itemId)
     if invType == "auto" then
         if GetResourceState('ox_inventory') == 'started' then
             invType = "ox"
-        elseif Config.Framework == "qb" then
-            invType = "qb"
-        elseif Config.Framework == "esx" then
-            invType = "esx"
+        elseif GetResourceState('qs-inventory') == 'started' then
+            invType = "qs"
+        elseif GetResourceState('codem-inventory') == 'started' or GetResourceState('m-inventory') == 'started' then
+            invType = "codem"
+        elseif GetResourceState('core_inventory') == 'started' then
+            invType = "core"
+        elseif GetResourceState('chezza-inventory') == 'started' or GetResourceState('inventory') == 'started' then
+            if exports['inventory'] and exports['inventory'].AddItem then
+                invType = "chezza"
+            end
+        end
+        
+        if invType == "auto" then
+            if Config.Framework == "qb" then
+                invType = "qb"
+            elseif Config.Framework == "esx" then
+                invType = "esx"
+            end
         end
     end
 
@@ -261,8 +408,21 @@ local function VerifyItemExists(itemId)
             local items = exports.ox_inventory:Items()
             return items and items[itemId] ~= nil
         end
+    elseif invType == "qs" then
+        if exports['qs-inventory'] then
+            local items = exports['qs-inventory']:GetItemList()
+            return items and items[itemId] ~= nil
+        end
     elseif invType == "qb" and QBCore then
         return QBCore.Shared.Items[itemId] ~= nil
+    elseif invType == "esx" and ESX then
+        if ESX.Items and ESX.Items[itemId] ~= nil then
+            return true
+        end
+        local ok, label = pcall(function()
+            return ESX.GetItemLabel(itemId)
+        end)
+        return ok and label ~= nil
     end
     return true -- Fallback for others
 end
@@ -297,6 +457,14 @@ AddEventHandler('ys_blackmarket:purchase', function(itemId)
         return
     end
 
+    -- Security Gate: Verify that the item actually exists in the inventory system database on the server
+    local itemExists = VerifyItemExists(itemId)
+    if not itemExists then
+        TriggerClientEvent('ys_blackmarket:purchaseResult', src, false, "Item registry error: Item not registered on this server.")
+        print(("^1[YS Blackmarket]^7 Warning: Player %s tried to purchase unregistered item '%s'!"):format(GetPlayerName(xPlayer), itemId))
+        return
+    end
+
     -- Check money
     local playerMoney = GetPlayerMoney(xPlayer, src)
     if playerMoney < itemConfig.price then
@@ -312,8 +480,22 @@ AddEventHandler('ys_blackmarket:purchase', function(itemId)
         return
     end
 
-    -- Add item using generalized inventory helper
-    local success, errorMsg = AddItemToInventory(src, xPlayer, itemId, itemConfig)
+    -- Add item using generalized inventory helper with pcall protection (crash safeguard)
+    local success = false
+    local errorMsg = "unknown_error"
+    
+    local ok, res, err = pcall(function()
+        return AddItemToInventory(src, xPlayer, itemId, itemConfig)
+    end)
+    
+    if ok then
+        success = res
+        errorMsg = err or "inventory_error"
+    else
+        print("^1[YS Blackmarket]^7 Crash prevented! Inventory system threw a script error: " .. tostring(res))
+        success = false
+        errorMsg = "script_crash"
+    end
     
     if success then
         -- Apply cooldown
@@ -342,6 +524,8 @@ AddEventHandler('ys_blackmarket:purchase', function(itemId)
             errorMessage = errorMessage .. "Your inventory is full."
         elseif errorMsg == "ox_inventory_not_available" then
             errorMessage = errorMessage .. "Inventory system error."
+        elseif errorMsg == "script_crash" then
+            errorMessage = errorMessage .. "Server inventory script error."
         else
             errorMessage = errorMessage .. "Unknown error: " .. tostring(errorMsg)
         end

@@ -66,6 +66,16 @@ body.active {
     filter: drop-shadow(0 0 10px #00f0ff);
 }
 
+.logo-img {
+    height: 55px;
+    width: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #00f0ff;
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+    filter: drop-shadow(0 0 5px rgba(0, 240, 255, 0.3));
+}
+
 .logo-text {
     font-size: 1.8rem;
     font-weight: 800;

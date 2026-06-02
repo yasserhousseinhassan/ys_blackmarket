@@ -303,8 +303,22 @@ window.addEventListener('message', function(event) {
             }
             if (event.data.uiLogoIcon) {
                 const logoIcon = document.getElementById('logoIcon');
-                if (logoIcon) {
-                    logoIcon.className = `fas ${event.data.uiLogoIcon} logo-icon`;
+                const logoImage = document.getElementById('logoImage');
+                
+                // If it looks like a FontAwesome icon
+                if (event.data.uiLogoIcon.indexOf('fa-') === 0) {
+                    if (logoIcon && logoImage) {
+                        logoIcon.className = `fas ${event.data.uiLogoIcon} logo-icon`;
+                        logoIcon.style.display = 'block';
+                        logoImage.style.display = 'none';
+                    }
+                } else {
+                    // It's an image source path
+                    if (logoIcon && logoImage) {
+                        logoImage.src = event.data.uiLogoIcon;
+                        logoImage.style.display = 'block';
+                        logoIcon.style.display = 'none';
+                    }
                 }
             }
             if (event.data.uiWarning) {

@@ -25,6 +25,7 @@ files {
     'html/index.html',
     'html/css/style.css',
     'html/js/script.js',
+    'html/logo.png',
     'html/assets/images/weapons/*.png',
     'html/assets/images/items/*.png',
     'html/assets/sounds/*.wav'
